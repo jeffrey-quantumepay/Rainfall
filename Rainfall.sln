@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rainfall.Web.API", "Rainfal
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{38093414-2DC9-4C0C-90E9-D521A8F38D17}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rainfall", "Rainfall", "{C6B7D09C-E1E3-4F37-A51F-108C0484BBD9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,7 +23,6 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{894E9C67-5876-4B2C-A755-56672AE5427E} = {38093414-2DC9-4C0C-90E9-D521A8F38D17}
-		{C6B7D09C-E1E3-4F37-A51F-108C0484BBD9} = {38093414-2DC9-4C0C-90E9-D521A8F38D17}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {727AA025-A084-4035-AC0F-288F91E00E03}

@@ -12,8 +12,15 @@ namespace Rainfall.Web.API.Controllers
         {
         }
 
+        /// <summary>
+        /// Get rainfall readings by station Id
+        /// </summary>
+        /// <param name="stationId">The id of the reading station</param>
+        /// <param name="count">The number of readings to return</param>
+        /// <returns></returns>
         [HttpGet("/rainfall/id/{stationId}/readings")]
-        public async Task<IActionResult> Readings([FromRoute] string stationId, [FromQuery] string count)
+        
+        public async Task<IActionResult> Readings([FromRoute] string stationId, [FromQuery] int count)
         {
             return  Ok(new { stationId, count });
 
