@@ -26,7 +26,10 @@ namespace Rainfall.Web.API.Controllers
         /// <returns></returns>
         [HttpGet("/rainfall/id/{stationId}/readings")]
         [Produces(MediaTypeNames.Application.Json)]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(GetReadingByStationIdCommandResponse))]
         [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ValidationResponseError))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(NotFoundResponseError))]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError, Type = typeof(InternalPaymentsResponseError))]
         public async Task<IActionResult> Readings([FromRoute] string stationId, [FromQuery] int count = 10)
         {
             try
@@ -42,20 +45,21 @@ namespace Rainfall.Web.API.Controllers
 
                 return Ok();
             }
-            catch (RainfallException rex)
+            catch (RainfallException re)
             {
-                switch (rex)
+                switch (re)
                 {
-                    case RainfallValidationException rve: return BadRequest(new ValidationResponseError("Validation Exception Error", rex.Errors));
+                    case RainfallRecordValidationException rve: return base.BadRequest(new ValidationResponseError(stationId, rve.Errors));
+                    case RainfallRecordNotFoundException rnf: return base.NotFound(new NotFoundResponseError(stationId, rnf.Errors));
                     default: break;
                 }
             }
-            catch(Exception vex)
+            catch(Exception e)
             {
-                return BadRequest(vex.Data);
+                // to do: log error
             }
 
-            return StatusCode(StatusCodes.Status500InternalServerError);
+            return StatusCode(StatusCodes.Status500InternalServerError, new InternalPaymentsResponseError(stationId));
         }
     }
 }

@@ -17,6 +17,13 @@ namespace Rainfall.SharedLibrary.Models
             propertyName = failure.PropertyName;
         }
 
+        public Error(Code code)
+        {
+            Code = code.ToSnakeCase();
+            message = code.GetDescription();
+        }
+
+
         public string Code { get; private set; }
 
         public string propertyName { get; private set; }

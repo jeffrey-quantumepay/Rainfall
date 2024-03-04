@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace Rainfall.Application.Models
 {
+
     public class ValidationResponseError
     {
-        public ValidationResponseError(string message, IList<Error> errors)
+        public ValidationResponseError(string stationdId,  IList<Error> errors)
         {
-            Message = message;
+            StationId = stationdId;
             if (errors != null)
                 Errors = errors.Select(x => new BadRequestOutcome(x.propertyName, x.message)).ToList();
         }
@@ -20,7 +21,8 @@ namespace Rainfall.Application.Models
         [JsonPropertyName("detail")]
         public IList<BadRequestOutcome> Errors { get; protected set; }
 
-        public  string Message { get; protected set; }
+        [JsonPropertyName("stationId")]
+        public string StationId { get; protected set; }
 
     }
 

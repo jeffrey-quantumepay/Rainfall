@@ -22,6 +22,9 @@ namespace Rainfall.SharedLibrary
 
         [Description("invalid route parameters")]
         InvalidRouteParameters = 40405,
+
+        [Description("record not found")]
+        RecordNotFound = 40410,
     }
 
     public static class EnumHelper
