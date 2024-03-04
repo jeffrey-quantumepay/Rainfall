@@ -1,25 +1,22 @@
 ﻿using FluentValidation.Results;
-using Rainfall.SharedLibrary.Models;
+using Error = Rainfall.SharedLibrary.Models.Error;
 
 namespace Rainfall.SharedLibrary.Exceptions
 {
-    public class ValidationException : BaseException
+    public class RainfallValidationException : RainfallException
     {
-        public ValidationException()
+        public RainfallValidationException()
             : base("One or more validation failures have occurred.")
         {
 
         }
 
-        public ValidationException(IEnumerable<ValidationFailure> failures)
+        public RainfallValidationException(IEnumerable<ValidationFailure> failures)
             : this()
         {
-            var errors = failures.GroupBy(e => e.PropertyName, e => e, (name, failure) => new { Key = name, Validation = failure });
-
             foreach (var failure in failures)
                 Errors.Add(new Error(failure));
         }
     }
-
 
 }

@@ -2,6 +2,7 @@
 using FluentValidation;
 using MediatR;
 
+using Rainfall.SharedLibrary.Exceptions;
 
 namespace Rainfall.SharedLibrary.Behaviours
 {
@@ -25,7 +26,7 @@ namespace Rainfall.SharedLibrary.Behaviours
 
                 if (list.Count != 0)
                 {
-                    throw new ValidationException(list);
+                    throw new RainfallValidationException(list);
                 }
             }
 
