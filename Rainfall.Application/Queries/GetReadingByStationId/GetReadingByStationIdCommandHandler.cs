@@ -1,16 +1,4 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Http;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Rainfall.SharedLibrary.Responses;
-using System.Text.Json;
-using System;
-using System.IO;
-using System.Text;
 using Rainfall.SharedLibrary.ExtensionMethods;
 using Microsoft.Extensions.Configuration;
 using Rainfall.Application.Models;
@@ -48,9 +36,7 @@ namespace Rainfall.Application.Queries
             {
                 using (var httpClient = _httpClientFactory.CreateClient())
                 {
-                    using var httpResponseMessage = await httpClient.GetAsync($"{rainfallUrl}/id/statons/{request.StationId}/readings?_sorted&_limit={request.Count}");
-
-                    // To Do: check response
+                    using var httpResponseMessage = await httpClient.GetAsync($"{rainfallUrl}/id/stations/{request.StationId}/readings?_sorted&_limit={request.Count}");
 
                     var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
                   
@@ -74,7 +60,7 @@ namespace Rainfall.Application.Queries
 
                         if (!stationreading.items.Any())
                         {
-                            throw new RainfallNotFoundException("");
+                            throw new RainfallNotFoundException("Not Found");
                         }
                     }
 
