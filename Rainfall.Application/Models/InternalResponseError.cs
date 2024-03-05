@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Rainfall.Application.Models
 {
-    public class InternalPaymentsResponseError
+    public class InternalResponseError
     {
 
-        public InternalPaymentsResponseError(string stationdId)
+        public InternalResponseError(string stationdId)
         {
             StationId = stationdId;
         }

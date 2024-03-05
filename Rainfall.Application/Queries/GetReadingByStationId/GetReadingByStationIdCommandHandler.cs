@@ -43,29 +43,48 @@ namespace Rainfall.Application.Queries
         {
             var rainfallUrl = _config.GetSection("MicroServiceConfig:RainfallEndpoint").Value;
             var readings = new List<StationReadingDto>();
-
+            var stationreading = new StationReading();
             try
             {
                 using (var httpClient = _httpClientFactory.CreateClient())
                 {
-                    using var httpResponseMessage = await httpClient.GetAsync($"{rainfallUrl}/id/stations/{request.StationId}/readings?_sorted&_limit={request.Count}");
+                    using var httpResponseMessage = await httpClient.GetAsync($"{rainfallUrl}/id/statons/{request.StationId}/readings?_sorted&_limit={request.Count}");
 
                     // To Do: check response
 
                     var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
-                    var result = stream.ReadAndDeserializeFromJson<StationReading>();
+                  
 
-                    if (!result.items.Any())
+                    if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.InternalServerError)
                     {
-                        throw new RainfallRecordNotFoundException();
+                        throw new RainfallInternalServerException("Internal Server Error");
+
+                    }
+                    else if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.BadRequest)
+                    {
+                        throw new RainfallValidationException("Bad Request");
+                    }
+                    else if (httpResponseMessage.StatusCode == System.Net.HttpStatusCode.NotFound)
+                    {
+                        throw new RainfallNotFoundException("Not Found");
+                    }
+                    else
+                    {
+                        stationreading = stream.ReadAndDeserializeFromJson<StationReading>();
+
+                        if (!stationreading.items.Any())
+                        {
+                            throw new RainfallNotFoundException("");
+                        }
                     }
 
-                    readings = _mapper.Map<List<StationReadingDto>>(result.items);
+                    readings = _mapper.Map<List<StationReadingDto>>(stationreading.items);
 
                 }
             }catch(Exception ex)
             {
                 // to do: log error
+                throw;
             }
 
             return new GetReadingByStationIdCommandResponse

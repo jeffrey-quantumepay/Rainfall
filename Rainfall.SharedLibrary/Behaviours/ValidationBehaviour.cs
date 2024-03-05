@@ -26,7 +26,7 @@ namespace Rainfall.SharedLibrary.Behaviours
 
                 if (list.Count != 0)
                 {
-                    throw new Exceptions.RainfallRecordValidationException(list);
+                    throw new Exceptions.RainfallValidationException(list);
                 }
             }
 
