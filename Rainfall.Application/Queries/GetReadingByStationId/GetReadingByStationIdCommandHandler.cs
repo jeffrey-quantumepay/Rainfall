@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Rainfall.Application.Models;
 using AutoMapper;
 using Rainfall.SharedLibrary.Exceptions;
+using Microsoft.Extensions.Logging;
 
 namespace Rainfall.Application.Queries
 {
@@ -15,15 +16,18 @@ namespace Rainfall.Application.Queries
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
+        private readonly ILogger<GetReadingByStationIdCommandHandler> _logger;
 
         public GetReadingByStationIdCommandHandler(
                 IHttpClientFactory httpClientFactory,
                  IConfiguration config,
+                        ILogger<GetReadingByStationIdCommandHandler> logger,
                    IMapper mapper)
         {
             _httpClientFactory = httpClientFactory;
             _config = config;
             _mapper = mapper;
+            _logger = logger;
 
         }
 
@@ -36,7 +40,7 @@ namespace Rainfall.Application.Queries
             {
                 using (var httpClient = _httpClientFactory.CreateClient())
                 {
-                    using var httpResponseMessage = await httpClient.GetAsync($"{rainfallUrl}/id/stations/{request.StationId}/readings?_sorted&_limit={request.Count}");
+                    using var httpResponseMessage = await httpClient.GetAsync($"{rainfallUrl}/id/statins/{request.StationId}/readings?_sorted&_limit={request.Count}");
 
                     var stream = await httpResponseMessage.Content.ReadAsStreamAsync();
                   
@@ -69,7 +73,7 @@ namespace Rainfall.Application.Queries
                 }
             }catch(Exception ex)
             {
-                // to do: log error
+                _logger.LogError(ex, "Error");
                 throw;
             }
 

@@ -10,12 +10,21 @@ namespace Rainfall.Application.Models
     public class InternalResponseError
     {
 
+        public InternalResponseError(string message, string stationdId)
+        {
+            Message = message;
+            StationId = stationdId;
+        }
+
         public InternalResponseError(string stationdId)
         {
             StationId = stationdId;
         }
 
-        [JsonPropertyName("stationId")]
+        [JsonIgnore]
         public string StationId { get; protected set; }
+
+        [JsonPropertyName("message")]
+        public string Message { get; protected set; }
     }
 }

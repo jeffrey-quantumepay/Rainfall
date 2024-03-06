@@ -10,8 +10,9 @@ namespace Rainfall.Application.Models
 {
     public class NotFoundResponseError
     {
-        public NotFoundResponseError(string stationdId, IList<Error> errors)
+        public NotFoundResponseError(string message, string stationdId, IList<Error> errors)
         {
+            Message = message;
             StationId = stationdId;
             if (errors != null)
                 Errors = errors.Select(x => new BadRequestOutcome(x.propertyName, x.message + ". StationId: " + stationdId)).ToList();
@@ -20,6 +21,8 @@ namespace Rainfall.Application.Models
         [JsonPropertyName("detail")]
         public IList<BadRequestOutcome> Errors { get; protected set; }
 
+        [JsonPropertyName("message")]
+        public string Message { get; protected set; }
 
         [JsonIgnore]
         public string StationId { get; protected set; }

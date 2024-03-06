@@ -11,9 +11,10 @@ namespace Rainfall.Application.Models
 
     public class ValidationResponseError
     {
-        public ValidationResponseError(string stationdId,  IList<Error> errors)
+        public ValidationResponseError(string message, string stationdId,  IList<Error> errors)
         {
             StationId = stationdId;
+            Message = message;
             if (errors != null)
                 Errors = errors.Select(x => new BadRequestOutcome(x.propertyName, x.message)).ToList();
         }
@@ -21,7 +22,10 @@ namespace Rainfall.Application.Models
         [JsonPropertyName("detail")]
         public IList<BadRequestOutcome> Errors { get; protected set; }
 
-        [JsonPropertyName("stationId")]
+        [JsonPropertyName("message")]
+        public string Message { get; protected set; }
+
+        [JsonIgnore]
         public string StationId { get; protected set; }
 
     }

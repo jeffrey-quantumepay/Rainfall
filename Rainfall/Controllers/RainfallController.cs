@@ -11,10 +11,13 @@ namespace Rainfall.Web.API.Controllers
     [Route("")]
     public class RainfallController : ControllerBase
     {
+        private readonly ILogger<RainfallController> _logger;
         private readonly IMediator _mediator;
 
-        public RainfallController(IMediator mediator)
+        public RainfallController(ILogger<RainfallController> logger, 
+            IMediator mediator)
         {
+            _logger = logger;
             _mediator = mediator;
         }
 
@@ -49,14 +52,16 @@ namespace Rainfall.Web.API.Controllers
             {
                 switch (re)
                 {
-                    case RainfallValidationException rve: return base.BadRequest(new ValidationResponseError(stationId, rve.Errors));
-                    case RainfallNotFoundException rnf: return base.NotFound(new NotFoundResponseError(stationId, rnf.Errors));
-                    default: break;
+                    case RainfallValidationException rve: return base.BadRequest(new ValidationResponseError(rve.Message, rve.stationId, rve.Errors));
+                    case RainfallNotFoundException rnf: return base.NotFound(new NotFoundResponseError(rnf.Message, rnf.stationId,rnf.Errors));
+                    default:
+                        return base.NotFound(new InternalResponseError(re.Message, re.stationId));
+                        break;
                 }
             }
-            catch(Exception e)
+            catch(Exception ex)
             {
-                // to do: log error
+                _logger.LogError(ex, "Reading Exception: stationId {0}", stationId);
             }
 
             return StatusCode(StatusCodes.Status500InternalServerError, new InternalResponseError(stationId));
