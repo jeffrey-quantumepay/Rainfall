@@ -1,1 +1,34 @@
 
+name: Build and Deploy via FTP
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build and FTP Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '7.0.x'  # or your .NET version
+
+    - name: Publish app (Self-contained for Windows)
+      run: dotnet publish MyWebApi/MyWebApi.csproj -c Release -o ./publish --self-contained -r win-x86
+
+    - name: Upload via FTP
+      uses: sebastianpopp/ftp-action@v2
+      with:
+        host: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        localDir: ./publish
+        remoteDir: /wwwroot/yourfolder  # change based on your FTP directory
